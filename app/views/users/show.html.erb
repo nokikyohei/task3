@@ -7,7 +7,7 @@
           <% if @user.profile_image.attached? %>
             <%= image_tag @user.profile_image, size: "63×63" %>
           <% else %>
-            <%= image_tag 'no_image', size: "63×63" %>
+            <%= image_tag 'no_image.jpg', size: "63×63" %>
           <% end %>
           <table class="table">
             <tbody>
@@ -24,41 +24,26 @@
           </table>
 
           <div class="row">
-            <%= link_to edit_user_path, class: "btn btn-outline-secondary btn-block" do %>
+            <%= link_to user_path(current_user), class: "btn btn-outline-secondary btn-block" do %>
               <i class="fas fa-user-cog"></i>
             <% end %>
           </div>
-          
-          
+
+
           <h2 class="mt-3">New book</h2>
             <%= form_with model: @book do |f| %>
 
               <h4>Title</h4>
               <%= f.text_field :title %>
-            
-              <h4>Body</h4>
-              <%= f.text_area :body %>
-            
-              <br><%= f.submit 'Create Book' %></br>
-            
-            <% end %>
 
-          <!--<form action="/books" accept-charset="UTF-8" method="post">-->
-          <!--  <input name="utf8" type="hidden" value="✓">-->
-          <!--  <input type="hidden" name="authenticity_token" value="7NJkrz/f/B/b7OuP1J9Zz4691H9uJItuHdOqFF8J994MARsiUMTm5tbTLOLUr2FnuLU5HpYjS+pugpTbfXkMLA==">-->
-          <!--  <div class="form-group">-->
-          <!--    <label for="book_title">Title</label>-->
-          <!--    <input class="form-control book_title" type="text" name="book[title]" id="book_title">-->
-          <!--  </div>-->
-          <!--  <div class="form-group">-->
-          <!--    <label for="book_opinion">Opinion</label>-->
-          <!--    <textarea class="form-control book_body" name="book[body]" id="book_body"></textarea>-->
-          <!--  </div>-->
-          <!--  <div class="form-group">-->
-          <!--    <input type="submit" name="commit" value="Create Book" class="btn btn-success" data-disable-with="Create Book">-->
-          <!--  </div>-->
-          <!--</form>-->
+              <h4>Opinion</h4>
+              <%= f.text_area :body %>
+
+              <br><%= f.submit 'Create Book' %></br>
+
+            <% end %>
         </div>
+
         <div class="col-md-8 offset-md-1">
           <h2>Books</h2>
           <table class="table table-hover table-inverse">
@@ -70,7 +55,30 @@
                 <th colspan="3"></th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <% @books.each do |book| %>
+                <tr>
+                  <th>
+                    <% if book.user.profile_image.attached? %>
+                      <%= link_to user_path(book.user.id) do %>
+                        <%= image_tag book.user.profile_image, size: "40×40" %><br />
+                      <% end %>
+                    <% else %>
+                      <%= link_to user_path(book.user.id) do %>
+                        <%= image_tag 'no_image', size: "40×40" %><br />
+                      <% end %>
+                    <% end %>
+                  </th>
+                  <th>
+                    <%= link_to book_path(book.user.id) do %>
+                      <%= book.title %>
+                    <% end %>
+                  </th>
+                  <th><%= book.body %></th>
+                  <th colspan="3"></th>
+                </tr>
+              <% end %>
+            </tbody>
           </table>
         </div>
       </div>
